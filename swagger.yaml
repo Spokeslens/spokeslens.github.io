@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: Spokeslens - OpenAPI 3.0
+  title: Spokeslens API
   description: |-
     REST API Document for Spokeslens
   contact:
