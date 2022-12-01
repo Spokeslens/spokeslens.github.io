@@ -1,0 +1,31 @@
+openapi: 3.0.3
+info:
+  title: Spokeslens - OpenAPI 3.0
+  description: |-
+    REST API Document for Spokeslens
+  contact:
+    email: henryk@spokeslens.com
+  version: 0.0.1
+externalDocs:
+  description: Github Repository
+  url: https://github.com/Spokeslens/functions-api
+servers:
+  - url: https://api.spokeslens.com
+tags:
+  - name: dev
+    description: Non-production API
+paths:
+  /ping:
+    get:
+      tags:
+        - dev
+      summary: Ping pong
+      description: Check server status
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            text/plain:
+              schema:
+                type: "string"
+                example: "pong"
