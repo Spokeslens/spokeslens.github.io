@@ -14,7 +14,107 @@ servers:
 tags:
   - name: dev
     description: Non-production API
+  - name: supervisor
+    description: Supervisor Endpoints
 paths:
+  /supervisor:
+    get:
+      tags:
+        - supervisor
+      summary: Fetch supervisor account
+      description: Fetch supervisor account using its id
+      responses:
+        "200":
+          description: Supervisor account
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Supervisor"
+        "400":
+          description: Failed operation
+
+    post:
+      tags:
+        - supervisor
+      summary: Edit supervisor account
+      description: Edit supervisor account using its id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                col:
+                  type: string
+                val:
+                  type: string
+      responses:
+        "200":
+          description: Successful operation
+        "400":
+          description: Failed operation
+
+  /supervisor/signup:
+    post:
+      tags:
+        - supervisor
+      summary: Create an account
+      description: Create a new account based on Google OAuth information or retrieve existing user
+      responses:
+        "200":
+          description: Supervisor account
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Supervisor"
+        "400":
+          description: Failed operation
+
+  /supervisor/patient:
+    get:
+      tags:
+        - supervisor
+      summary: Get all patients
+      description: Fetch all patients from a supervisor account
+      responses:
+        "200":
+          description: List of all patients linked with the account
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Patient"
+    post:
+      tags:
+        - supervisor
+      summary: Add new patient
+      description: Add new patient to a supervisor account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  code:
+                    type: string
+        "400":
+          description: Failed operation
+
   /ping:
     get:
       tags:
@@ -27,5 +127,33 @@ paths:
           content:
             text/plain:
               schema:
-                type: "string"
-                example: "pong"
+                type: string
+                example: pong
+components:
+  schemas:
+    Supervisor:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+
+    Patient:
+      type: object
+      properties:
+        id:
+          type: integer
+        supervisor:
+          type: string
+        name:
+          type: string
+        code:
+          type: string
+        device:
+          type: string
+          format: uuid
+        notify:
+          type: boolean
+        emergency:
+          type: boolean
