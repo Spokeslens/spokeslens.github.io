@@ -16,6 +16,8 @@ tags:
     description: Non-production API
   - name: supervisor
     description: Supervisor Endpoints
+  - name: patient
+    description: Patient Endpoints
 paths:
   /supervisor:
     get:
@@ -115,6 +117,88 @@ paths:
         "400":
           description: Failed operation
 
+  /patient:
+    get:
+      tags:
+        - patient
+      summary: Fetch patient data
+      description: Fetch patient data with device uuid
+      parameters:
+        - in: header
+          name: device
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Patient"
+        "401":
+          description: Unauthenticated
+    post:
+      tags:
+        - patient
+      summary: Register device to patient
+      description: Register device to patient with device uuid and code
+      parameters:
+        - in: header
+          name: device
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Patient"
+        "400":
+          description: Failed operation
+        "401":
+          description: Unauthenticated
+
+  /patient/state:
+    post:
+      tags:
+        - patient
+      summary: Change patient's state
+      description: Change patient's state to either normal (null or 0), need help ('help' or 1), or emergency ('emergency' or 2)
+      parameters:
+        - in: header
+          name: device
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                state:
+                  type: string
+      responses:
+        "200":
+          description: Successful operation
+        "400":
+          description: Failed operation
+        "401":
+          description: Unauthenticated
+
   /ping:
     get:
       tags:
@@ -153,7 +237,5 @@ components:
         device:
           type: string
           format: uuid
-        notify:
-          type: boolean
-        emergency:
-          type: boolean
+        state:
+          type: string
